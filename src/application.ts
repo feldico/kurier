@@ -236,10 +236,10 @@ export default class Application {
     };
 
     if (isEmptyObject(composedMeta)) {
-      return composedMeta;
+      return;
     }
 
-    return;
+    return composedMeta;
   }
 
   async createTransaction(): Promise<Knex.Transaction | NoOpTransaction> {

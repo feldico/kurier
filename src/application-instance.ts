@@ -11,6 +11,7 @@ import User from "./resources/user";
 export default class ApplicationInstance {
   public user: User | undefined;
   public transaction: Knex.Transaction | NoOpTransaction;
+  public requestContext
 
   constructor(public app: Application) {}
 

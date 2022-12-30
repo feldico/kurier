@@ -50,6 +50,15 @@ export default function jsonApiKoa(
       return next();
     }
 
+    const requestContext = {
+      ip: ctx.ip,
+      origin: ctx.origin,
+      headers: ctx.headers,
+      host: ctx.host
+    }
+
+    appInstance.requestContext = requestContext
+
     ctx.request["urlData"] = urlData(appInstance, ctx.path);
 
     if (ctx.method === "PATCH" && ctx.request["urlData"].resource === "bulk") {
