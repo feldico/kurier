@@ -16,6 +16,7 @@ import User from "./resources/user";
 import Comment from "./resources/comment";
 import Vote from "./resources/vote";
 import Random from "./resources/random";
+import Tag from "./resources/tag";
 
 import UserProcessor from "./processors/user";
 import ArticleProcessor from "./processors/article";
@@ -25,7 +26,7 @@ import LatitudeLongitude from "./attribute-types/latitude-longitude";
 
 const app = new Application({
   namespace: "api",
-  types: [Article, Comment, Vote, Random],
+  types: [Article, Comment, Vote, Random, Tag],
   processors: [ArticleProcessor, VoteProcessor, RandomProcessor],
   defaultProcessor: KnexProcessor,
   attributeTypes: [LatitudeLongitude],

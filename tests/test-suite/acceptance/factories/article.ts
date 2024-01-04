@@ -210,6 +210,45 @@ export default {
       },
     ],
   },
+  fistArticleWithTagsIncluded: {
+    data: {
+      id: 1,
+      type: "article",
+      attributes: {
+        body: "this is test 1",
+        voteCount: 2,
+      },
+      meta: {
+        hello: "world",
+      },
+      relationships: {
+        author: {
+          data: {
+            id: 1,
+            type: "user",
+          },
+        },
+        tags: {
+          data: [
+            {
+              id: 1,
+              type: "tag",
+            },
+          ],
+        },
+      },
+    },
+    included: [
+      {
+        id: 1,
+        type: "tag",
+        attributes: {
+          name: "News",
+        },
+        relationships: {},
+      },
+    ],
+  },
   multipleArticlesIncludedVotes: {
     data: [
       {
