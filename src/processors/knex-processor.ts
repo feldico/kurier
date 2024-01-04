@@ -18,6 +18,7 @@ import pick from "../utils/pick";
 import promiseHashMap from "../utils/promise-hash-map";
 import OperationProcessor from "./operation-processor";
 import { KnexOperators as operators } from "../utils/operators";
+import { singularize } from "../utils/string";
 
 const getWhereMethod = (value: string, operator: string) => {
   if (value !== "null") {
@@ -371,6 +372,16 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
         .where(`${baseTableName}.${primaryKey}`, sqlOperator, queryIn)
         .select(columns.map((field) => `${foreignTableName}.${field}`));
     }
+
+    if(relationship.manyToMany){
+      const foreignKey = relationship.foreignKeyName || `${baseResource.type}_${primaryKey}`
+      const baseTableNameSinguralized = singularize(baseTableName)
+      return query
+          .join(`${relationship['intermediateTable']}`, `${foreignTableName}.${primaryKey}`,"=",`${relationship['intermediateTable']}.${foreignKey}` )
+          .join(baseTableName,`${relationship['intermediateTable']}.${baseTableNameSinguralized}_${primaryKey}`, "=", `${baseTableName}.${primaryKey}`)
+          .where(`${baseTableName}.${primaryKey}`, sqlOperator, queryIn)
+          .select(columns.map((field) => `${foreignTableName}.${field}`))
+      }
   }
 
   async getRelationships(op: Operation, record: HasId, eagerLoadedData: EagerLoadedData) {
