@@ -411,4 +411,56 @@ export default {
       },
     ],
   },
-};
+  forCreation: {
+    requests: {
+      jsonapi:
+        {data: {
+          type: "article",
+          attributes: {
+            body: "test",
+          },
+          relationships: {
+            tag: {
+              data: [{
+                id: 1,
+                type: "tag",
+              },{
+                id: 2,
+                type: "tag",
+              },
+              ]
+            },
+          },
+        },
+      },
+    }
+  },
+  forUpdate: {
+    requests: {
+      jsonapi:
+      {
+        data: {
+          type: "article",
+          id: 1,
+          attributes: {
+            body: "coso",
+          },
+          relationships: {
+            tag: {
+              data: [
+                {
+                  id: 1,
+                  type: "tag",
+                },
+                {
+                  id: 2,
+                  type: "tag",
+                },
+              ],
+            },
+          },
+        },
+      }
+    }
+  }
+}
