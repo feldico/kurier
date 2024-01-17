@@ -182,6 +182,7 @@ export interface ResourceSchemaRelationship {
   manyToMany?: boolean;
   belongsTo?: boolean;
   foreignKeyName?: string;
+  intermediateTable?: string;
 }
 
 export type HasManyResourceSchemaRelationship = ResourceSchemaRelationship & {

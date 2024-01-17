@@ -21,6 +21,7 @@ export default class Article extends Resource {
       },
       tags: {
         type: () => Tag,
+        foreignKeyName: "tag_id",
         manyToMany: true,
         intermediateTable: "articles_tags"
       },

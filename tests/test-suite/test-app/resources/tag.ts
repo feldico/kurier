@@ -10,6 +10,7 @@ export default class Tag extends Resource {
     relationships: {
       articles: {
         type: () => Article,
+        foreignKeyName: "article_id",
         manyToMany: true,
         intermediateTable: "articles_tags"
       },

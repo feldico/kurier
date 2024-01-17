@@ -420,7 +420,7 @@ export default {
             body: "test",
           },
           relationships: {
-            tag: {
+            tags: {
               data: [{
                 id: 1,
                 type: "tag",
@@ -446,7 +446,7 @@ export default {
             body: "coso",
           },
           relationships: {
-            tag: {
+            tags: {
               data: [
                 {
                   id: 1,

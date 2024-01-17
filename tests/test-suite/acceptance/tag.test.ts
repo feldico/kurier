@@ -23,7 +23,7 @@ describe.each(transportLayers)("Transport Layer: %s", (transportLayer) => {
           const newResourceWithTags = await request.get(`/articles/4?include=tags`);
           expect(newResourceWithTags.status).toEqual(200);
           expect(newResourceWithTags.body.data.relationships.tags.data).toEqual(
-            articles.forCreation.requests.jsonapi.data.relationships.tag.data,
+            articles.forCreation.requests.jsonapi.data.relationships.tags.data,
           );
         });
       });
@@ -41,7 +41,7 @@ describe.each(transportLayers)("Transport Layer: %s", (transportLayer) => {
           expect(result.status).toEqual(200);
           const fistArticleWithTags = await request.get(`/articles/1?include=tags`);
           expect(fistArticleWithTags.status).toEqual(200);
-          expect(fistArticleWithTags.body.data.relationships.tags.data).toEqual(articles.forUpdate.requests.jsonapi.data.relationships.tag.data);
+          expect(fistArticleWithTags.body.data.relationships.tags.data).toEqual(articles.forUpdate.requests.jsonapi.data.relationships.tags.data);
         });
       });
     });

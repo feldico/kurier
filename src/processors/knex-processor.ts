@@ -18,7 +18,7 @@ import pick from "../utils/pick";
 import promiseHashMap from "../utils/promise-hash-map";
 import OperationProcessor from "./operation-processor";
 import { KnexOperators as operators } from "../utils/operators";
-import { singularize } from "../utils/string";
+import { pluralize } from "../utils/string";
 
 const getWhereMethod = (value: string, operator: string) => {
   if (value !== "null") {
@@ -186,13 +186,13 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     for (const relationshipName in this.resourceClass.schema.relationships) {
       const relationship = this.resourceClass.schema.relationships[relationshipName];
 
-      // Check if the relationship is manyToMany
       if (relationship.manyToMany) {
-          await this.knex(relationship['intermediateTable'])
-            .where({ [`${this.resourceClass.type}_${primaryKey}`]: id })
-            .del()
+        const relationResourceClass = await this.resourceFor(relationship.type().type)
+        const toManyResourceFK = relationResourceClass.schema.relationships[`${pluralize(this.resourceClass.type)}`].foreignKeyName;
+        await this.knex(relationship['intermediateTable'])
+          .where({ [`${toManyResourceFK}`]: id })
+          .del()
       }
-
     }
 
     return await this.getQuery()
@@ -226,42 +226,38 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
 
     for (const relationshipName in this.resourceClass.schema.relationships) {
       const relationship = this.resourceClass.schema.relationships[relationshipName];
-  
-      // Check if the relationship is manyToMany
+
       if (relationship.manyToMany) {
-        // Get the related data
-        let relatedData = data['relationships'][singularize(relationshipName)]['data'] || [];
+        let relatedData = data.relationships[relationshipName].data || [];
 
         if (!Array.isArray(relatedData)) {
           relatedData = [relatedData];
         }
-            // Get the current data in the intermediate table
-        const currentData = await this.knex.select('*').from(relationship['intermediateTable'])
-        .where({ [`${this.resourceClass.type}_${primaryKey}`]: id });
 
+        const relationResourceClass = await this.resourceFor(relationship.type().type)
+        const primaryKeyIntermediate = relationResourceClass.schema.relationships[`${pluralize(this.resourceClass.type)}`].foreignKeyName;
 
-        // Convert currentData to a set for easier lookup
-        const currentDataSet = new Set(currentData.map(item => item[`${relationship.type().type}_id`]));
+        if(relationship['intermediateTable']){
+          const currentData = await this.knex.select('*').from(relationship['intermediateTable'])
+          .where({ [`${primaryKeyIntermediate}`]: id });
+          const currentDataSet = new Set(currentData.map(item => item[`${relationship.foreignKeyName}`].toString()));
 
-        // Insert the related data into the intermediate table
-        for (const relatedItem of relatedData) {
-          if (!currentDataSet.has(relatedItem.id)) {
-            // If the relatedItem is not in the intermediate table, insert it
-            await this.knex(relationship['intermediateTable']).insert({
-              [`${this.resourceClass.type}_${primaryKey}`]: id,
-              [`${relationship.type().type}_id`]: relatedItem.id,
-            });
+          for (const relatedItem of relatedData) {
+            if (!currentDataSet.has(relatedItem.id.toString())) {
+              await this.knex(relationship['intermediateTable']).insert({
+                [`${primaryKeyIntermediate}`]: id,
+                [`${relationship.foreignKeyName}`]: relatedItem.id,
+              });
+            }
+            currentDataSet.delete(relatedItem.id.toString());
           }
-          // Remove the item from the set as it's already in the relatedData
-          currentDataSet.delete(relatedItem.id);
-        }
 
-        // Delete the items that are in the intermediate table but not in the relatedData
-        for (const itemId of currentDataSet) {
-          if (itemId) {
-          await this.knex(relationship['intermediateTable'])
-            .where({ [`${this.resourceClass.type}_${primaryKey}`]: id,  [`${relationship.type().type}_id`]: itemId })
-            .delete();}
+          for (const itemId of currentDataSet) {
+            if (itemId) {
+            await this.knex(relationship['intermediateTable'])
+              .where({ [`${primaryKeyIntermediate}`]: id,  [`${relationship.foreignKeyName}`]: itemId })
+              .delete();}
+          }
         }
       }
     }
@@ -297,20 +293,20 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
 
     for (const relationshipName in this.resourceClass.schema.relationships) {
       const relationship = this.resourceClass.schema.relationships[relationshipName];
-  
-      // Check if the relationship is manyToMany
+
       if (relationship.manyToMany) {
-        // Get the related data
-        let relatedData = data['relationships'][singularize(relationshipName)]['data'] || [];
+        let relatedData = data.relationships[relationshipName].data || [];
+        const relationResourceClass = await this.resourceFor(relationship.type().type)
+        const primaryKeyIntermediate = relationResourceClass.schema.relationships[`${pluralize(this.resourceClass.type)}`].foreignKeyName;
 
         if (!Array.isArray(relatedData)) {
           relatedData = [relatedData];
         }
-        // Insert the related data into the intermediate table
+
         for (const relatedItem of relatedData) {
-          await this.knex(relationship['intermediateTable']).insert({
-            [`${this.resourceClass.type}_${primaryKeyName}`]: insertedId[primaryKeyName],
-            [`${relationship.type().type}_id`]: relatedItem['id'],
+          await this.knex(relationship.intermediateTable).insert({
+            [`${primaryKeyIntermediate}`]: insertedId[primaryKeyName],
+            [`${relationship.foreignKeyName}`]: relatedItem['id'],
           });
         }
       }
@@ -448,11 +444,13 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     }
 
     if(relationship.manyToMany){
-      const foreignKey = relationship.foreignKeyName || `${baseResource.type}_${primaryKey}`
-      const baseTableNameSinguralized = singularize(baseTableName)
+      const foreignKey = relationship.foreignKeyName;
+      const relationResourceClass = await this.resourceFor(relationship.type().type)
+      const primaryKeyIntermediate = relationResourceClass.schema.relationships[`${pluralize(this.resourceClass.type)}`].foreignKeyName;
+
       return query
-          .join(`${relationship['intermediateTable']}`, `${foreignTableName}.${primaryKey}`,"=",`${relationship['intermediateTable']}.${foreignType}_${primaryKey}` )
-          .join(baseTableName,`${relationship['intermediateTable']}.${baseTableNameSinguralized}_${primaryKey}`, "=", `${baseTableName}.${primaryKey}`)
+          .join(`${relationship['intermediateTable']}`, `${foreignTableName}.${primaryKey}`,"=",`${relationship['intermediateTable']}.${foreignKey}` )
+          .join(baseTableName,`${relationship['intermediateTable']}.${primaryKeyIntermediate}`, "=", `${baseTableName}.${primaryKey}`)
           .where(`${baseTableName}.${primaryKey}`, sqlOperator, queryIn)
           .select(columns.map((field) => `${foreignTableName}.${field}`))
       }
