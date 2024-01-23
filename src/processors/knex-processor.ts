@@ -228,7 +228,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
       const relationship = this.resourceClass.schema.relationships[relationshipName];
 
       if (relationship.manyToMany) {
-        let relatedData = data.relationships[relationshipName].data || [];
+        let relatedData = data.relationships[relationshipName]?.data || [];
 
         if (!Array.isArray(relatedData)) {
           relatedData = [relatedData];
@@ -295,7 +295,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
       const relationship = this.resourceClass.schema.relationships[relationshipName];
 
       if (relationship.manyToMany) {
-        let relatedData = data.relationships[relationshipName].data || [];
+        let relatedData = data.relationships[relationshipName]?.data || [];
         const relationResourceClass = await this.resourceFor(relationship.type().type)
         const primaryKeyIntermediate = relationResourceClass.schema.relationships[`${pluralize(this.resourceClass.type)}`].foreignKeyName;
 
