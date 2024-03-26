@@ -21,10 +21,11 @@ import ArticleProcessor from "./processors/article";
 import VoteProcessor from "./processors/vote";
 import RandomProcessor from "./processors/random";
 import LatitudeLongitude from "./attribute-types/latitude-longitude";
+import Tag from "./resources/tag";
 
 const app = new Application({
   namespace: "api",
-  types: [Article, Comment, Vote, Random],
+  types: [Article, Comment, Vote, Random, Tag],
   processors: [ArticleProcessor, VoteProcessor, RandomProcessor],
   defaultProcessor: KnexProcessor,
 });

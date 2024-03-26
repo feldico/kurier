@@ -32,6 +32,19 @@ exports.seed = (knex) => {
         { _id: 3, body: "hello3", type: "spam", author_id: 1 },
       ],
     },
+    {
+      tableName: "tags",
+      values: [
+        { id: 1, name: "News"},
+        { id: 2, name: "News2"},
+      ],
+    },
+    {
+      tableName: "articles_tags",
+      values: [
+        { id: 1, article_id: 1, tag_id: 1},
+      ],
+    },
   ];
   return Promise.all(initialData.map(({ tableName, values }) => knex(tableName).insert(values))).then(() => {});
 };
