@@ -1,4 +1,5 @@
 import { Resource } from "../kurier";
+import Tag from "./tag";
 import User from "./user";
 import Vote from "./vote";
 
@@ -17,6 +18,12 @@ export default class Article extends Resource {
       votes: {
         type: () => Vote,
         hasMany: true,
+      },
+      tags: {
+        type: () => Tag,
+        foreignKeyName: "tag_id",
+        manyToMany: true,
+        intermediateTable: "articles_tags"
       },
     },
   };

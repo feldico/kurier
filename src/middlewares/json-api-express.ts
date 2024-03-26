@@ -28,7 +28,7 @@ export default function jsonApiExpress(
       return next();
     }
 
-    if (req.headers["content-type"] !== "application/vnd.api+json") {
+    if (!req.headers["content-type"] || !req.headers["content-type"].startsWith("application/vnd.api+json")) {
       res
         .status(400)
         .json(convertErrorToHttpResponse(jsonApiErrors.BadRequest("Content-Type must be application/vnd.api+json")));
@@ -51,7 +51,7 @@ export default function jsonApiExpress(
     try {
       await authenticate(appInstance, req);
     } catch (error) {
-      res.status(error.status).json(convertErrorToHttpResponse(error));
+      res.status(+error.status).json(convertErrorToHttpResponse(error));
       return next();
     }
 

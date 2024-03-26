@@ -210,6 +210,45 @@ export default {
       },
     ],
   },
+  fistArticleWithTagsIncluded: {
+    data: {
+      id: 1,
+      type: "article",
+      attributes: {
+        body: "this is test 1",
+        voteCount: 2,
+      },
+      meta: {
+        hello: "world",
+      },
+      relationships: {
+        author: {
+          data: {
+            id: 1,
+            type: "user",
+          },
+        },
+        tags: {
+          data: [
+            {
+              id: 1,
+              type: "tag",
+            },
+          ],
+        },
+      },
+    },
+    included: [
+      {
+        id: 1,
+        type: "tag",
+        attributes: {
+          name: "News",
+        },
+        relationships: {},
+      },
+    ],
+  },
   multipleArticlesIncludedVotes: {
     data: [
       {
@@ -372,4 +411,56 @@ export default {
       },
     ],
   },
-};
+  forCreation: {
+    requests: {
+      jsonapi:
+        {data: {
+          type: "article",
+          attributes: {
+            body: "test",
+          },
+          relationships: {
+            tags: {
+              data: [{
+                id: 1,
+                type: "tag",
+              },{
+                id: 2,
+                type: "tag",
+              },
+              ]
+            },
+          },
+        },
+      },
+    }
+  },
+  forUpdate: {
+    requests: {
+      jsonapi:
+      {
+        data: {
+          type: "article",
+          id: 1,
+          attributes: {
+            body: "coso",
+          },
+          relationships: {
+            tags: {
+              data: [
+                {
+                  id: 1,
+                  type: "tag",
+                },
+                {
+                  id: 2,
+                  type: "tag",
+                },
+              ],
+            },
+          },
+        },
+      }
+    }
+  }
+}

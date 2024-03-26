@@ -49,6 +49,13 @@ describe.each(transportLayers)("Transport Layer: %s", (transportLayer) => {
         expect(result.body).toEqual(articles.singleArticleMultipleIncludes);
       });
 
+      it("Authenticated - Get an specific article with it's votes and author - Multiple types include", async () => {
+        const authData = await getAuthenticationData();
+        const result = await request.get("/articles/1?include=author,votes").set("Authorization", authData.token);
+        expect(result.status).toEqual(200);
+        expect(result.body).toEqual(articles.singleArticleMultipleIncludes);
+      });
+
       it("UNAuthenticated - Get an specific article with it's author - Should not include author", async () => {
         const result = await request.get("/articles/1?include=author");
         expect(result.body.included).toEqual(undefined);

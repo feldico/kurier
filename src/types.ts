@@ -179,8 +179,10 @@ export type ResourceSchemaRelationships = {
 export interface ResourceSchemaRelationship {
   type: () => typeof Resource;
   hasMany?: boolean;
+  manyToMany?: boolean;
   belongsTo?: boolean;
   foreignKeyName?: string;
+  intermediateTable?: string;
 }
 
 export type HasManyResourceSchemaRelationship = ResourceSchemaRelationship & {
