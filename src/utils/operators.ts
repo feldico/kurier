@@ -36,21 +36,6 @@ export const FunctionalOperators: { [T in OperatorName]: (actual: any, expected:
 
     return false
   },
-  ilike: (actual: string, expected: string) => {
-    if (expected.startsWith('%') && expected.endsWith('%')) {
-      return actual.toLowerCase().includes(expected.replace(/%/g, '').toLowerCase())
-    }
-
-    if (expected.startsWith('%')) {
-      return actual.toLowerCase().endsWith(expected.replace(/%/g, '').toLowerCase())
-    }
-
-    if (expected.endsWith('%')) {
-      return actual.toLowerCase().startsWith(expected.replace(/%/g, '').toLowerCase())
-    }
-
-    return false
-  },
   nlike: (actual: string, expected: string) => {
     if (expected.startsWith('%') && expected.endsWith('%')) {
       return !actual.includes(expected.replace(/%/g, ''))
