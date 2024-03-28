@@ -128,7 +128,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     return eagerlyLoadedData;
   }
 
-  protected getColumns(serializer: IJsonApiSerializer, fields = {}): string[] {
+  protected getColumns(serializer: IJsonApiSerializer, fields = {}): any[] {
     const { type, schema } = this.resourceClass;
     const { attributes, relationships, primaryKeyName } = schema;
     const relationshipsKeys = Object.entries(relationships)
@@ -144,6 +144,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     return [
       ...attributesKeys.map((key) => `${serializer.attributeToColumn(key)} as ${key}`),
       ...relationshipsKeys,
+      this.knex.raw('count(*) OVER() AS total'),
       primaryKeyName || DEFAULT_PRIMARY_KEY,
     ];
   }
@@ -161,6 +162,11 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
 
     if (!records.length && id) {
       throw JsonApiErrors.RecordNotExists();
+    }
+
+    if (op.params?.page) {
+      op.meta = op.meta || {};
+      op.meta.total = records[0]?.total;
     }
 
     if (id) {
