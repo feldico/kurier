@@ -418,7 +418,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     const foreignTableName = relationProcessor.tableName;
     const foreignType = relationProcessor.resourceClass.type;
     const sqlOperator = Array.isArray(result) ? "in" : "=";
-    const columns = relationProcessor.getColumns(this.appInstance.app.serializer);
+    const columns = relationProcessor.getColumns(this.appInstance.app.serializer).filter((column) => typeof column == 'string');
 
     const primaryKey = baseResource.schema.primaryKeyName || DEFAULT_PRIMARY_KEY;
 
