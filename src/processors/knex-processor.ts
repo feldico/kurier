@@ -331,7 +331,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
   getValidAttributes(schema: ResourceSchema, serializer: IJsonApiSerializer) {
     const { attributes, relationships, primaryKeyName } = schema;
     const relationshipsKeys = Object.entries(relationships)
-      .filter(([, value]) => value.belongsTo)
+      .filter(([, value]) => value.belongsTo || value.manyToMany)
       .map(
         ([key, value]) =>
           value.foreignKeyName || serializer.relationshipToColumn(key, primaryKeyName || DEFAULT_PRIMARY_KEY),
