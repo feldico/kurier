@@ -1,0 +1,10 @@
+import { AttributeValueMatch } from "../types";
+export declare function ifUser(attribute: string, value: string | number | boolean | string[] | number[]): AttributeValueMatch;
+export declare function ifUserDoesNotMatches(attribute: string, value: string | number | boolean | string[] | number[]): AttributeValueMatch;
+export declare function ifUserMatchesEvery(attribute: string, value: string | number | boolean | string[] | number[]): AttributeValueMatch;
+export declare function ifUserHasRole(value: string | string[]): AttributeValueMatch;
+export declare function ifUserHasEveryRole(value: string[]): AttributeValueMatch;
+export declare function ifUserDoesNotHaveRole(value: string | string[]): AttributeValueMatch;
+export declare function ifUserHasPermission(value: string | string[]): AttributeValueMatch;
+export declare function ifUserHasEveryPermission(value: string[]): AttributeValueMatch;
+export declare function ifUserDoesNotHavePermission(value: string | string[]): AttributeValueMatch;

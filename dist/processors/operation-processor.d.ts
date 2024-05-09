@@ -1,0 +1,38 @@
+import Resource from "../resource";
+import { HasId, Operation, EagerLoadedData, MaybeMeta, ApplicationInstanceInterface } from "../types";
+export default class OperationProcessor<ResourceT extends Resource> {
+    appInstance: ApplicationInstanceInterface;
+    static resourceClass: typeof Resource;
+    static shouldHandle(resourceType: string): Promise<boolean>;
+    get resourceClass(): typeof Resource;
+    protected attributes: {};
+    protected relationships: {};
+    constructor(appInstance: ApplicationInstanceInterface);
+    execute(op: Operation): Promise<ResourceT | ResourceT[] | void>;
+    computeRelationshipProperties(op: any, eagerLoadedData: any): Promise<any>;
+    computeDirectRelationsProps(op: Operation, directRelations: any, relationResourceClass: any): Promise<any>;
+    computeNestedRelationsProps(op: Operation, nestedRelations: any, baseRelationResourceClass: any): Promise<any>;
+    eagerLoad(op: Operation, result: ResourceT | ResourceT[]): Promise<{}>;
+    getComputedProperties(op: Operation, resourceClass: typeof Resource, record: HasId, eagerLoadedData: EagerLoadedData): Promise<{}>;
+    matchesComputedFilters(op: Operation, computedAttributes: any): Promise<boolean>;
+    getAttributes(op: Operation, resourceClass: typeof Resource, record: HasId, eagerLoadedData: EagerLoadedData): Promise<Record<string, unknown>>;
+    getRelationships(op: Operation, record: HasId, eagerLoadedData: EagerLoadedData): Promise<{}>;
+    getRelationshipAttributes(op: Operation, resourceClass: typeof Resource, record: HasId, eagerLoadedData: EagerLoadedData): Promise<Record<string, unknown>>;
+    convertToResources(op: Operation, records: HasId[] | HasId, eagerLoadedData: EagerLoadedData[]): any;
+    resourceFor(resourceType: string): Promise<typeof Resource>;
+    processorFor(resourceType: string): Promise<OperationProcessor<Resource>>;
+    get(op: Operation): Promise<HasId[] | HasId>;
+    remove(op: Operation): Promise<void>;
+    update(op: Operation): Promise<HasId>;
+    add(op: Operation): Promise<HasId>;
+    meta(resourceOrResources: ResourceT | ResourceT[]): Promise<MaybeMeta>;
+    metaFor(op: Operation, resourceOrResources: ResourceT | ResourceT[]): Promise<MaybeMeta>;
+    metaForGet(resourceOrResources: ResourceT | ResourceT[]): Promise<MaybeMeta>;
+    metaForAdd(resourceOrResources: ResourceT | ResourceT[]): Promise<MaybeMeta>;
+    metaForUpdate(resourceOrResources: ResourceT | ResourceT[]): Promise<MaybeMeta>;
+    resourceMeta(resource: ResourceT): Promise<MaybeMeta>;
+    resourceMetaFor(op: Operation, resource: ResourceT): Promise<MaybeMeta>;
+    resourceMetaForGet(resource: ResourceT): Promise<MaybeMeta>;
+    resourceMetaForAdd(resource: ResourceT): Promise<MaybeMeta>;
+    resourceMetaForUpdate(resource: ResourceT): Promise<MaybeMeta>;
+}

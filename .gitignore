@@ -1,5 +1,5 @@
 node_modules/
-dist/
+# dist/
 *.log
 test.sqlite3
 test.sqlite3-journal

@@ -1,0 +1,77 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttributeType = exports.UserManagementAddon = exports.Addon = exports.IfUserHasRole = exports.IfUserHasPermission = exports.IfUserHasEveryRole = exports.IfUserHasEveryPermission = exports.IfUserDoesNotHaveRole = exports.IfUserDoesNotHavePermission = exports.Password = exports.Session = exports.User = exports.SessionProcessor = exports.UserProcessor = exports.IfUserDoesNotMatches = exports.IfUserMatchesEvery = exports.IfUser = exports.Authorize = exports.decorateWith = exports.jsonApiVercel = exports.jsonApiWebSocket = exports.jsonApiExpress = exports.jsonApiKoa = exports.JsonApiSerializer = exports.OperationProcessor = exports.JsonApiError = exports.JsonApiErrors = exports.KnexProcessor = exports.ApplicationInstance = exports.Application = exports.Resource = void 0;
+const application_1 = require("./application");
+exports.Application = application_1.default;
+const application_instance_1 = require("./application-instance");
+exports.ApplicationInstance = application_instance_1.default;
+const authorize_1 = require("./decorators/authorize");
+exports.Authorize = authorize_1.default;
+const decorator_1 = require("./decorators/decorator");
+exports.decorateWith = decorator_1.default;
+const if_user_1 = require("./decorators/if-user");
+Object.defineProperty(exports, "IfUser", { enumerable: true, get: function () { return if_user_1.ifUser; } });
+Object.defineProperty(exports, "IfUserDoesNotMatches", { enumerable: true, get: function () { return if_user_1.ifUserDoesNotMatches; } });
+Object.defineProperty(exports, "IfUserMatchesEvery", { enumerable: true, get: function () { return if_user_1.ifUserMatchesEvery; } });
+Object.defineProperty(exports, "IfUserDoesNotHavePermission", { enumerable: true, get: function () { return if_user_1.ifUserDoesNotHavePermission; } });
+Object.defineProperty(exports, "IfUserDoesNotHaveRole", { enumerable: true, get: function () { return if_user_1.ifUserDoesNotHaveRole; } });
+Object.defineProperty(exports, "IfUserHasEveryPermission", { enumerable: true, get: function () { return if_user_1.ifUserHasEveryPermission; } });
+Object.defineProperty(exports, "IfUserHasEveryRole", { enumerable: true, get: function () { return if_user_1.ifUserHasEveryRole; } });
+Object.defineProperty(exports, "IfUserHasPermission", { enumerable: true, get: function () { return if_user_1.ifUserHasPermission; } });
+Object.defineProperty(exports, "IfUserHasRole", { enumerable: true, get: function () { return if_user_1.ifUserHasRole; } });
+const json_api_errors_1 = require("./errors/json-api-errors");
+exports.JsonApiErrors = json_api_errors_1.default;
+const error_1 = require("./errors/error");
+exports.JsonApiError = error_1.default;
+const json_api_koa_1 = require("./middlewares/json-api-koa");
+exports.jsonApiKoa = json_api_koa_1.default;
+const json_api_express_1 = require("./middlewares/json-api-express");
+exports.jsonApiExpress = json_api_express_1.default;
+const json_api_websocket_1 = require("./middlewares/json-api-websocket");
+exports.jsonApiWebSocket = json_api_websocket_1.default;
+const json_api_vercel_1 = require("./middlewares/json-api-vercel");
+exports.jsonApiVercel = json_api_vercel_1.default;
+const knex_processor_1 = require("./processors/knex-processor");
+exports.KnexProcessor = knex_processor_1.default;
+const operation_processor_1 = require("./processors/operation-processor");
+exports.OperationProcessor = operation_processor_1.default;
+const user_processor_1 = require("./processors/user-processor");
+exports.UserProcessor = user_processor_1.default;
+const session_processor_1 = require("./processors/session-processor");
+exports.SessionProcessor = session_processor_1.default;
+const resource_1 = require("./resource");
+exports.Resource = resource_1.default;
+const user_1 = require("./resources/user");
+exports.User = user_1.default;
+const session_1 = require("./resources/session");
+exports.Session = session_1.default;
+const password_1 = require("./attribute-types/password");
+exports.Password = password_1.default;
+const serializer_1 = require("./serializers/serializer");
+exports.JsonApiSerializer = serializer_1.default;
+const addon_1 = require("./addon");
+exports.Addon = addon_1.default;
+const user_management_1 = require("./addons/user-management");
+exports.UserManagementAddon = user_management_1.default;
+const attribute_type_1 = require("./attribute-types/attribute-type");
+exports.AttributeType = attribute_type_1.default;
+__exportStar(require("./resource-relationships"), exports);
+__exportStar(require("./types"), exports);
+__exportStar(require("./utils/string"), exports);
+__exportStar(require("./utils/http-utils"), exports);
+__exportStar(require("./utils/hooks"), exports);
+//# sourceMappingURL=index.js.map
