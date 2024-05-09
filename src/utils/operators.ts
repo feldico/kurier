@@ -66,21 +66,6 @@ export const FunctionalOperators: { [T in OperatorName]: (actual: any, expected:
 
     return false
   },
-  ilike: (actual: string, expected: string) => {
-    if (expected.startsWith("%") && expected.endsWith("%")) {
-      return actual.includes(expected.replace(/%/g, ""));
-    }
-
-    if (expected.startsWith("%")) {
-      return actual.endsWith(expected.replace(/%/g, ""));
-    }
-
-    if (expected.endsWith("%")) {
-      return actual.startsWith(expected.replace(/%/g, ""));
-    }
-
-    return false;
-  },
   in: <T = any>(actual: T, expected: T[]) => expected.includes(actual),
   nin: <T = any>(actual: T, expected: T[]) => !expected.includes(actual),
 }

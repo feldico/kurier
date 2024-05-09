@@ -249,6 +249,119 @@ export default {
       },
     ],
   },
+  multipleArticlesIncludedTags: {
+    data: [
+      {
+        id: 1,
+        type: "article",
+        attributes: {
+          body: "this is test 1",
+          voteCount: 2,
+        },
+        relationships: {
+          votes: {
+            data: [
+              {
+                id: 1,
+                type: "vote",
+              },
+              {
+                id: 2,
+                type: "vote",
+              },
+            ],
+          },
+          author: {
+            data: {
+              id: 1,
+              type: "user",
+            },
+          },
+        },
+        meta: {
+          hello: "world",
+        },
+      },
+     
+    ],
+    included: [
+      {
+        id: 1,
+        type: "vote",
+        attributes: {
+          points: 10,
+          createdOn: null,
+          updatedOn: null,
+          updatedBy: null,
+          createdBy: null,
+        },
+        relationships: {
+          user: {
+            data: {
+              id: 1,
+              type: "user",
+            },
+          },
+          article: {
+            data: {
+              id: 1,
+              type: "article",
+            },
+          },
+        },
+      },
+      {
+        id: 2,
+        type: "vote",
+        attributes: {
+          points: 2,
+          createdOn: null,
+          updatedOn: null,
+          updatedBy: null,
+          createdBy: null,
+        },
+        relationships: {
+          user: {
+            data: {
+              id: 1,
+              type: "user",
+            },
+          },
+          article: {
+            data: {
+              id: 1,
+              type: "article",
+            },
+          },
+        },
+      },
+      {
+        id: 3,
+        type: "vote",
+        attributes: {
+          points: 8,
+          createdOn: null,
+          updatedOn: null,
+          updatedBy: null,
+          createdBy: null,
+        },
+        relationships: {
+          user: {
+            data: {
+              id: 3,
+              type: "user",
+            },
+          },
+          article: {
+            data: {
+              id: 3,
+              type: "article",
+            },
+          },
+        },
+      },
+    ],
+  },
   multipleArticlesIncludedVotes: {
     data: [
       {
