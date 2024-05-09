@@ -42,6 +42,18 @@ describe.each(transportLayers)("Transport Layer: %s", (transportLayer) => {
         expect(result.body).toEqual({ data: [articles.toGet.response[0]] });
       });
 
+      it("Search Articles with included tags, filter by tagId", async () => {
+        const articleCreationResult = await request.post(`/articles`).send(articles.forCreation.requests.jsonapi);
+        expect(articleCreationResult.status).toEqual(201);
+        const firstArticleFilteredByFirstTag = await request.get(`/articles?include=tags&filter[tag_id]=1`);
+        expect(firstArticleFilteredByFirstTag.status).toEqual(200);
+        expect(firstArticleFilteredByFirstTag.body.data.length).toEqual(2);
+        const firstArticleFilteredBySecondTag = await request.get(`/articles?include=tags&filter[tag_id]=2`);
+        expect(firstArticleFilteredBySecondTag.status).toEqual(200);
+        expect(firstArticleFilteredBySecondTag.body.data.length).toEqual(1);
+        expect(firstArticleFilteredBySecondTag.body.data[0].relationships.tags.data).toEqual(articles.forUpdate.requests.jsonapi.data.relationships.tags.data);
+      });
+
       it("Authenticated - Get an specific article with it's votes and author - Multiple types include", async () => {
         const authData = await getAuthenticationData();
         const result = await request.get("/articles/1?include=author,votes").set("Authorization", authData.token);

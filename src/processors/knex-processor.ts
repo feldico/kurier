@@ -18,7 +18,7 @@ import pick from "../utils/pick";
 import promiseHashMap from "../utils/promise-hash-map";
 import OperationProcessor from "./operation-processor";
 import { KnexOperators as operators } from "../utils/operators";
-import { pluralize } from "../utils/string";
+import { underscore, pluralize } from "../utils/string";
 
 const getWhereMethod = (value: string, operator: string) => {
   if (value !== "null") {
@@ -155,10 +155,37 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     const primaryKey = this.resourceClass.schema.primaryKeyName || DEFAULT_PRIMARY_KEY;
     const filters = params ? { [primaryKey]: id, ...(params.filter || {}) } : { [primaryKey]: id };
 
-    const records: KnexRecord[] = await this.getQuery()
+    let query = this.getQuery();
+
+    let columns = this.getColumns(this.appInstance.app.serializer, (params || {}).fields);
+
+    if(params?.include){
+      let isIncluded = false;
+      for (const include of params.include) {
+        if(include.includes('.')){
+          continue;
+        }
+        const relationship = this.resourceClass.schema.relationships[include];
+        if (relationship.manyToMany && relationship.foreignKeyName&& relationship.intermediateTable && filters.hasOwnProperty(relationship.foreignKeyName)) {
+          if(!isIncluded){
+            columns = columns.map(column => {
+              if(typeof column !== 'string' && columns.toString().includes('count')){
+                return column
+              }
+            return `${this.tableName}.${column}`})
+            isIncluded = true
+          }
+          const intermediateTableColumn = `${underscore(op.ref.type)}_id`
+          query.innerJoin(relationship.intermediateTable, `${this.tableName}.${primaryKey}`, `${relationship.intermediateTable}.${intermediateTableColumn}`)
+          columns.push(`${relationship.intermediateTable}.${relationship.foreignKeyName} as ${relationship.foreignKeyName}`)
+        }
+      }
+    }
+
+    const records: KnexRecord[] = await query
       .where((queryBuilder) => this.filtersToKnex(queryBuilder, filters))
       .modify((queryBuilder) => this.optionsBuilder(queryBuilder, params || {}))
-      .select(this.getColumns(this.appInstance.app.serializer, (params || {}).fields));
+      .select(columns);
 
     if (!records.length && id) {
       throw JsonApiErrors.RecordNotExists();
