@@ -1,6 +1,6 @@
 {
-  "name": "kurier",
-  "version": "1.3.0-beta11",
+  "name": "@feldico/kurier",
+  "version": "1.4.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,9 +16,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kurierjs/kurier.git"
+    "url": "git+https://github.com/feldico/kurier.git"
   },
-  "author": "The Kurier.js Team",
+  "author": "The Kurier.js & Feldico's Team",
   "contributors": [
     "Joel A. Villarreal Bertoldi",
     "Santiago Pérsico",
@@ -27,13 +27,14 @@
     "Alexey Kulakov",
     "Maciej Kwaśniak",
     "Renan William",
-    "Marcelo Mira"
+    "Marcelo Mira",
+    "Martin Arbez",
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kurierjs/kurier/issues"
+    "url": "https://github.com/feldico/kurier/issues"
   },
-  "homepage": "https://github.com/kurierjs/kurier#readme",
+  "homepage": "https://github.com/feldico/kurier#readme",
   "dependencies": {
     "@types/node": "^20.12.11",
     "compose-middleware": "^5.0.1",
