@@ -260,7 +260,7 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     for (const relationshipName in this.resourceClass.schema.relationships) {
       const relationship = this.resourceClass.schema.relationships[relationshipName];
 
-      if (relationship.manyToMany) {
+      if (relationship.manyToMany && data?.relationships && Object.keys(data.relationships).length > 0) {
         let relatedData = data.relationships[relationshipName]?.data || [];
 
         if (!Array.isArray(relatedData)) {
