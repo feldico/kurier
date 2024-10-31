@@ -1,6 +1,6 @@
 {
   "name": "@feldico/kurier",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/feldico/kurier#readme",
   "dependencies": {
+    "@sentry/node": "^8.35.0",
     "@types/node": "^20.12.11",
     "compose-middleware": "^5.0.1",
     "ember-cli-string-utils": "^1.1.0",

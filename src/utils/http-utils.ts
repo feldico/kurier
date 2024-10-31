@@ -7,6 +7,7 @@ import { JsonApiDocument, JsonApiErrorsDocument, Operation, OperationResponse } 
 import { parse } from "../utils/json-api-params";
 import { camelize, singularize } from "../utils/string";
 import { isEmptyObject } from "./object";
+import * as Sentry from "@sentry/node";
 
 const STATUS_MAPPING = {
   GET: 200,
@@ -116,6 +117,11 @@ function convertOperationResponseToHttpResponse(
 
 function convertErrorToHttpResponse(error: JsonApiError): JsonApiErrorsDocument {
   const isJsonApiError = error && error.status;
+
+  if (process.env.SENTRY_ENABLED === "true") {
+    Sentry.captureException(error);
+  }
+
   if (!isJsonApiError) console.error("Kurier: ", error);
 
   const jsonApiError = isJsonApiError ? error : JsonApiErrors.UnhandledError();

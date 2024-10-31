@@ -1,3 +1,4 @@
+import "./utils/instrument";
 import { Knex } from "knex";
 import JsonApiErrors from "./errors/json-api-errors";
 import Addon from "./addon";
