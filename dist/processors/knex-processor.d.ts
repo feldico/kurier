@@ -14,7 +14,13 @@ export default class KnexProcessor<ResourceT extends Resource> extends Operation
     add(op: Operation): Promise<HasId>;
     get tableName(): string;
     getValidAttributes(schema: ResourceSchema, serializer: IJsonApiSerializer): string[];
-    filtersToKnex(queryBuilder: Knex.QueryBuilder, filters: {}): void;
+    filtersToKnex(queryBuilder: Knex.QueryBuilder, filters: {}): Promise<any>;
+    /**
+     * Apply a nested relationship filter using a two-step approach
+     * 1. Query related table to get valid IDs
+     * 2. Apply those IDs as a filter on the main table
+     */
+    private applyNestedFilter;
     optionsBuilder(queryBuilder: Knex.QueryBuilder, params: JsonApiParams): void;
     eagerFetchRelationship(key: string, result: ResourceT | ResourceT[], relationship: ResourceSchemaRelationship, baseResource: typeof Resource): Promise<KnexRecord[] | void>;
     getRelationships(op: Operation, record: HasId, eagerLoadedData: EagerLoadedData): Promise<EagerLoadedData>;

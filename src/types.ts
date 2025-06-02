@@ -140,6 +140,7 @@ export type OperationResponse = {
   data: Resource | Resource[] | null;
   included?: Resource[];
   meta?: Meta;
+  links?: Links;
 };
 
 export type KnexRecord = {
@@ -233,6 +234,7 @@ export interface IJsonApiSerializer {
     primaryKeyName?: string,
   ): ResourceRelationshipData[];
   serializeIncludedResources(data: Resource | Resource[] | void, resourceType: typeof Resource): Resource[] | null;
+  generateLinks(resourceType: string, resourceId?: string, relationshipName?: string): Links;
 }
 
 export interface IAddon {

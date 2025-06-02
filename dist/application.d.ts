@@ -1,3 +1,4 @@
+import "./utils/instrument";
 import { Knex } from "knex";
 import Addon from "./addon";
 import OperationProcessor from "./processors/operation-processor";

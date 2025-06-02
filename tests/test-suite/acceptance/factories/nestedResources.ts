@@ -8,15 +8,95 @@ export default {
   get: {
     authorAndAuthorVotesOf1stArticle: {
       data: {
-        ...getFactoryObject(articles)(1),
-        relationships: {
-          ...getExtraRelationships(users, "author")([1], "Object"),
+        type: "article",
+        id: 1,
+        attributes: {
+          body: "this is test 1",
+          voteCount: 2,
         },
         meta: {
           hello: "world",
         },
+        links: { self: "/article/1" },
+        relationships: {
+          author: {
+            data: { type: "user", id: 1 },
+            links: { related: "/article/1/author", self: "/article/1/relationships/author" },
+          },
+        },
       },
-      included: [getFactoryObject(users)(1), ...getFactoryObjects(votes)([1, 2])],
+      included: [
+        {
+          type: "user",
+          id: 1,
+          attributes: {
+            email: "me@me.com",
+            username: "me",
+            coolFactor: 11,
+            roles: ["user", "author", "voter"],
+            location: {
+              lat: -10.23,
+              lng: -10.24,
+            },
+            friends: [
+              { name: "Joel" },
+              { name: "Ryan" },
+              {
+                name: "Marc",
+                attributes: {
+                  age: 28,
+                },
+              },
+            ],
+          },
+          links: { self: "/user/1" },
+          relationships: {},
+        },
+        {
+          type: "vote",
+          id: 1,
+          attributes: {
+            createdOn: null,
+            createdBy: null,
+            updatedOn: null,
+            updatedBy: null,
+            points: 10,
+          },
+          links: { self: "/vote/1" },
+          relationships: {
+            user: {
+              data: { type: "user", id: 1 },
+              links: { related: "/vote/1/user", self: "/vote/1/relationships/user" },
+            },
+            article: {
+              data: { type: "article", id: 1 },
+              links: { related: "/vote/1/article", self: "/vote/1/relationships/article" },
+            },
+          },
+        },
+        {
+          type: "vote",
+          id: 2,
+          attributes: {
+            createdOn: null,
+            createdBy: null,
+            updatedOn: null,
+            updatedBy: null,
+            points: 2,
+          },
+          links: { self: "/vote/2" },
+          relationships: {
+            user: {
+              data: { type: "user", id: 1 },
+              links: { related: "/vote/2/user", self: "/vote/2/relationships/user" },
+            },
+            article: {
+              data: { type: "article", id: 1 },
+              links: { related: "/vote/2/article", self: "/vote/2/relationships/article" },
+            },
+          },
+        },
+      ],
     },
     articlesAndArticlesVotsOf2ndUser: {
       data: {
@@ -37,15 +117,51 @@ export default {
     },
     authorAndAuthorVotesAndAuthorCommentsOf1stArticle: {
       data: {
-        ...getFactoryObject(articles)(1),
-        relationships: {
-          ...getExtraRelationships(users, "author")([1], "Object"),
+        type: "article",
+        id: 1,
+        attributes: {
+          body: "this is test 1",
+          voteCount: 2,
         },
         meta: {
           hello: "world",
         },
+        links: { self: "/article/1" },
+        relationships: {
+          author: {
+            data: { type: "user", id: 1 },
+            links: { related: "/article/1/author", self: "/article/1/relationships/author" },
+          },
+        },
       },
-      included: [getFactoryObject(users)(1), ...getFactoryObjects(votes)([1, 2]), ...getFactoryObjects(comments)([1, 3])],
+      included: [
+        {
+          type: "user",
+          id: 1,
+          attributes: {
+            email: "me@me.com",
+            username: "me",
+            coolFactor: 11,
+            roles: ["user", "author", "voter"],
+            location: {
+              lat: -10.23,
+              lng: -10.24,
+            },
+            friends: [
+              { name: "Joel" },
+              { name: "Ryan" },
+              {
+                name: "Marc",
+                attributes: {
+                  age: 28,
+                },
+              },
+            ],
+          },
+          links: { self: "/user/1" },
+          relationships: {},
+        },
+      ],
     },
   },
 };

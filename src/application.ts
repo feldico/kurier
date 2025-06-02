@@ -24,6 +24,8 @@ import {
   ApplicationHooks,
   ApplicationInstanceInterface,
   ApplicationAttributeTypeFactory,
+  DEFAULT_PRIMARY_KEY,
+  Links,
 } from "./types";
 import flatten from "./utils/flatten";
 import { classify } from "./utils/string";
@@ -175,6 +177,49 @@ export default class Application {
               ] as string,
             },
           };
+        } else if (relationship.manyToMany) {
+          const intermediateTable = relationship.intermediateTable;
+          if (!intermediateTable) {
+            throw new Error(`manyToMany relationship ${op.ref.relationship} on ${resourceClass.type} missing intermediateTable definition.`);
+          }
+
+          const relatedForeignKey = relationship.foreignKeyName;
+          if (!relatedForeignKey) {
+            throw new Error(`manyToMany relationship ${op.ref.relationship} on ${resourceClass.type} missing foreignKeyName definition.`);
+          }
+
+          const thisResourceRelationship = Object.entries(relatedResourceClass.schema.relationships)
+            .find(([, rel]) => rel.type().type === resourceClass.type && rel.manyToMany);
+          if (!thisResourceRelationship) {
+            throw new Error(`Cannot find reverse manyToMany relationship from ${relatedResourceClass.type} to ${resourceClass.type}`);
+          }
+          const thisForeignKey = thisResourceRelationship[1].foreignKeyName;
+          if (!thisForeignKey) {
+            throw new Error(`Reverse manyToMany relationship ${thisResourceRelationship[0]} on ${relatedResourceClass.type} missing foreignKeyName definition.`);
+          }
+
+          if (!processor.appInstance.app.services?.knex) {
+            throw new Error("Knex service is required for manyToMany relationship endpoints.");
+          }
+          const subQuery = processor.appInstance.app.services.knex(intermediateTable)
+            .select(relatedForeignKey)
+            .where({ [thisForeignKey]: op.ref.id });
+
+          const relatedIds = (await subQuery).map(r => r[relatedForeignKey]);
+
+          relatedOp = {
+            ...op,
+            ref: {
+              type: relatedResourceClass.type,
+            },
+            params: {
+              ...op.params,
+              filter: {
+                ...(op.params || {}).filter,
+                [relatedResourceClass.schema.primaryKeyName || DEFAULT_PRIMARY_KEY]: `in:${relatedIds.join(',')}`
+              },
+            },
+          } as Operation;
         }
 
         const deserializedOperation = this.serializer.deserializeResource(relatedOp, relatedResourceClass);
@@ -367,12 +412,31 @@ export default class Application {
     const serializedResources = await this.serializeResources(data, op, appInstance);
     const meta = await this.buildDocumentMeta(data, processor, op);
 
+    // Generate top-level links for the operation response if appropriate
+    let links: Links | undefined;
+
+    if (op.ref.relationship && op.ref.id) {
+      // This is a relationship request with an ID
+      links = this.serializer.generateLinks(op.ref.type, op.ref.id, op.ref.relationship);
+    } else if (op.ref.id) {
+      // This is a single resource request with an ID
+      links = this.serializer.generateLinks(op.ref.type, op.ref.id);
+    } else {
+      // This is a collection request
+      links = this.serializer.generateLinks(op.ref.type);
+    }
+
     const response: OperationResponse = {
       data: serializedResources,
     };
 
     if (included.length) {
       response.included = included;
+    }
+
+    // Always include links in the response
+    if (links) {
+      response.links = links;
     }
 
     if (!isEmptyObject(meta as {})) {

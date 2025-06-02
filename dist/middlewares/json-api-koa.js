@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = jsonApiKoa;
 const koaBody = require("koa-body");
 const compose = require("koa-compose");
 const application_instance_1 = require("../application-instance");
@@ -65,5 +66,4 @@ function jsonApiKoa(app, transportLayerOptions = {
     };
     return compose([checkStrictMode, koaBody(koaBodySettings), ...middlewares, jsonApiKoa]);
 }
-exports.default = jsonApiKoa;
 //# sourceMappingURL=json-api-koa.js.map

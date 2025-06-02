@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = jsonApiVercel;
 const url_1 = require("url");
 const application_instance_1 = require("../application-instance");
 const http_utils_1 = require("../utils/http-utils");
@@ -58,5 +59,4 @@ function jsonApiVercel(app, transportLayerOptions = {
         res.json(body);
     };
 }
-exports.default = jsonApiVercel;
 //# sourceMappingURL=json-api-vercel.js.map

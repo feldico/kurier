@@ -1,11 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertErrorToHttpResponse = exports.convertOperationResponseToHttpResponse = exports.convertHttpRequestToOperation = exports.handleJsonApiEndpoint = exports.handleBulkEndpoint = exports.urlData = exports.authenticate = exports.STATUS_MAPPING = void 0;
+exports.STATUS_MAPPING = void 0;
+exports.authenticate = authenticate;
+exports.urlData = urlData;
+exports.handleBulkEndpoint = handleBulkEndpoint;
+exports.handleJsonApiEndpoint = handleJsonApiEndpoint;
+exports.convertHttpRequestToOperation = convertHttpRequestToOperation;
+exports.convertOperationResponseToHttpResponse = convertOperationResponseToHttpResponse;
+exports.convertErrorToHttpResponse = convertErrorToHttpResponse;
 const escapeStringRegexp = require("escape-string-regexp");
 const json_api_errors_1 = require("../errors/json-api-errors");
 const json_api_params_1 = require("../utils/json-api-params");
 const string_1 = require("../utils/string");
 const object_1 = require("./object");
+const Sentry = require("@sentry/node");
 const STATUS_MAPPING = {
     GET: 200,
     POST: 201,
@@ -23,7 +31,6 @@ async function authenticate(appInstance, request) {
     }
     appInstance.user = currentUser;
 }
-exports.authenticate = authenticate;
 function urlData(appInstance, path) {
     const urlRegexp = new RegExp(`^(\/+)?((?<namespace>${escapeStringRegexp(appInstance.app.namespace)})(\/+|$))?(?<resource>[^\\s\/?]+)?(\/+)?((?<id>[^\\s\/?]+)?(\/+)?(?<relationships>relationships)?(\/+)?)?` +
         "(?<relationship>[^\\s/?]+)?(/+)?$");
@@ -35,11 +42,9 @@ function urlData(appInstance, path) {
         isRelationships: !!relationships,
     };
 }
-exports.urlData = urlData;
 async function handleBulkEndpoint(appInstance, operations) {
     return { operations: await appInstance.app.executeOperations(operations || [], appInstance) };
 }
-exports.handleBulkEndpoint = handleBulkEndpoint;
 async function handleJsonApiEndpoint(appInstance, request) {
     const op = convertHttpRequestToOperation(request);
     try {
@@ -56,7 +61,6 @@ async function handleJsonApiEndpoint(appInstance, request) {
         };
     }
 }
-exports.handleJsonApiEndpoint = handleJsonApiEndpoint;
 function convertHttpRequestToOperation(req) {
     const { id, resource, relationship } = req.urlData;
     const type = (0, string_1.camelize)((0, string_1.singularize)(resource));
@@ -74,7 +78,6 @@ function convertHttpRequestToOperation(req) {
         data: (req.body || {}).data,
     };
 }
-exports.convertHttpRequestToOperation = convertHttpRequestToOperation;
 function convertOperationResponseToHttpResponse(req, operation) {
     const responseMethods = ["GET", "POST", "PATCH", "PUT"];
     if (responseMethods.includes(req.method)) {
@@ -90,9 +93,11 @@ function convertOperationResponseToHttpResponse(req, operation) {
         return document;
     }
 }
-exports.convertOperationResponseToHttpResponse = convertOperationResponseToHttpResponse;
 function convertErrorToHttpResponse(error) {
     const isJsonApiError = error && error.status;
+    if (process.env.SENTRY_ENABLED === "true") {
+        Sentry.captureException(error);
+    }
     if (!isJsonApiError)
         console.error("Kurier: ", error);
     const jsonApiError = isJsonApiError ? error : json_api_errors_1.default.UnhandledError();
@@ -107,5 +112,4 @@ function convertErrorToHttpResponse(error) {
     }
     return { errors: [jsonApiError] };
 }
-exports.convertErrorToHttpResponse = convertErrorToHttpResponse;
 //# sourceMappingURL=http-utils.js.map

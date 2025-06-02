@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./utils/instrument");
 const json_api_errors_1 = require("./errors/json-api-errors");
 const application_instance_1 = require("./application-instance");
 const authorize_1 = require("./decorators/authorize");
 const knex_processor_1 = require("./processors/knex-processor");
 const serializer_1 = require("./serializers/serializer");
+const types_1 = require("./types");
 const flatten_1 = require("./utils/flatten");
 const string_1 = require("./utils/string");
 const object_1 = require("./utils/object");
@@ -70,6 +72,7 @@ class Application {
         }
     }
     async executeOperation(op, processor) {
+        var _a;
         const resourceClass = await this.resourceFor(op.ref.type);
         if (op.ref.relationship) {
             const relationship = resourceClass.schema.relationships[op.ref.relationship];
@@ -103,6 +106,45 @@ class Application {
                             type: relatedResourceClass.type,
                             id: result.attributes[resourceClass.schema.relationships[op.ref.relationship].foreignKeyName ||
                                 this.serializer.relationshipToColumn(op.ref.relationship)],
+                        },
+                    };
+                }
+                else if (relationship.manyToMany) {
+                    const intermediateTable = relationship.intermediateTable;
+                    if (!intermediateTable) {
+                        throw new Error(`manyToMany relationship ${op.ref.relationship} on ${resourceClass.type} missing intermediateTable definition.`);
+                    }
+                    const relatedForeignKey = relationship.foreignKeyName;
+                    if (!relatedForeignKey) {
+                        throw new Error(`manyToMany relationship ${op.ref.relationship} on ${resourceClass.type} missing foreignKeyName definition.`);
+                    }
+                    const thisResourceRelationship = Object.entries(relatedResourceClass.schema.relationships)
+                        .find(([, rel]) => rel.type().type === resourceClass.type && rel.manyToMany);
+                    if (!thisResourceRelationship) {
+                        throw new Error(`Cannot find reverse manyToMany relationship from ${relatedResourceClass.type} to ${resourceClass.type}`);
+                    }
+                    const thisForeignKey = thisResourceRelationship[1].foreignKeyName;
+                    if (!thisForeignKey) {
+                        throw new Error(`Reverse manyToMany relationship ${thisResourceRelationship[0]} on ${relatedResourceClass.type} missing foreignKeyName definition.`);
+                    }
+                    if (!((_a = processor.appInstance.app.services) === null || _a === void 0 ? void 0 : _a.knex)) {
+                        throw new Error("Knex service is required for manyToMany relationship endpoints.");
+                    }
+                    const subQuery = processor.appInstance.app.services.knex(intermediateTable)
+                        .select(relatedForeignKey)
+                        .where({ [thisForeignKey]: op.ref.id });
+                    const relatedIds = (await subQuery).map(r => r[relatedForeignKey]);
+                    relatedOp = {
+                        ...op,
+                        ref: {
+                            type: relatedResourceClass.type,
+                        },
+                        params: {
+                            ...op.params,
+                            filter: {
+                                ...(op.params || {}).filter,
+                                [relatedResourceClass.schema.primaryKeyName || types_1.DEFAULT_PRIMARY_KEY]: `in:${relatedIds.join(',')}`
+                            },
                         },
                     };
                 }
@@ -237,11 +279,29 @@ class Application {
         }));
         const serializedResources = await this.serializeResources(data, op, appInstance);
         const meta = await this.buildDocumentMeta(data, processor, op);
+        // Generate top-level links for the operation response if appropriate
+        let links;
+        if (op.ref.relationship && op.ref.id) {
+            // This is a relationship request with an ID
+            links = this.serializer.generateLinks(op.ref.type, op.ref.id, op.ref.relationship);
+        }
+        else if (op.ref.id) {
+            // This is a single resource request with an ID
+            links = this.serializer.generateLinks(op.ref.type, op.ref.id);
+        }
+        else {
+            // This is a collection request
+            links = this.serializer.generateLinks(op.ref.type);
+        }
         const response = {
             data: serializedResources,
         };
         if (included.length) {
             response.included = included;
+        }
+        // Always include links in the response
+        if (links) {
+            response.links = links;
         }
         if (!(0, object_1.isEmptyObject)(meta)) {
             response.meta = meta;

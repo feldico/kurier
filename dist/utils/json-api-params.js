@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parse = void 0;
+exports.parse = parse;
 const url_1 = require("url");
 const JSON_API_OBJECT_KEYS = ["fields", "filter"];
 const JSON_API_ARRAY_VALUES = ["include", "sort", "fields"];
@@ -28,7 +28,6 @@ function parse(url) {
     }
     return params;
 }
-exports.parse = parse;
 function parseValueForKey(key, value = "") {
     if (JSON_API_ARRAY_VALUES.includes(key)) {
         return value.split(",");

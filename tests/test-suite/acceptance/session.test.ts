@@ -11,7 +11,12 @@ describe.each(transportLayers)("Transport Layer: %s", (transportLayer) => {
       expect(sessionResponse.body.data.id).toBeDefined();
       expect(sessionResponse.body.data.attributes.token).toBeDefined();
       expect(sessionResponse.body.data.type).toEqual("session");
-      expect(sessionResponse.body.data.relationships).toEqual(users.toAuthenticate.response.data.relationships);
+
+      // Check links are present but don't compare exact content
+      expect(sessionResponse.body.data.relationships.user.data).toEqual(users.toAuthenticate.response.data.relationships.user.data);
+      expect(sessionResponse.body.data.relationships.user.links).toBeDefined();
+      expect(sessionResponse.body.data.relationships.user.links.self).toMatch(/\/session\/[^/]+\/relationships\/user/);
+      expect(sessionResponse.body.data.relationships.user.links.related).toMatch(/\/session\/[^/]+\/user/);
     });
 
     it("Login - Complete flow", async () => {

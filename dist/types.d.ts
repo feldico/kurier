@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import { IncomingMessage, ServerResponse } from "http";
 import { Knex } from "knex";
 import { Request as ExpressRequest } from "express";
@@ -122,6 +120,7 @@ export type OperationResponse = {
     data: Resource | Resource[] | null;
     included?: Resource[];
     meta?: Meta;
+    links?: Links;
 };
 export type KnexRecord = {
     id: string;
@@ -192,6 +191,7 @@ export interface IJsonApiSerializer {
     serializeResource(resource: Resource, resourceType: typeof Resource): Resource;
     serializeRelationship(relationships: Resource | Resource[], resourceType: typeof Resource, primaryKeyName?: string): ResourceRelationshipData[];
     serializeIncludedResources(data: Resource | Resource[] | void, resourceType: typeof Resource): Resource[] | null;
+    generateLinks(resourceType: string, resourceId?: string, relationshipName?: string): Links;
 }
 export interface IAddon {
     install(): Promise<void>;

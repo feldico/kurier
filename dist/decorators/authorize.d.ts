@@ -6,5 +6,5 @@ import Resource from "../resource";
  * context object. If there is, it'll allow the operation to continue.
  * If not, it'll throw an `Unauthorized` error code.
  */
-export default function authorize(...conditions: AttributeValueMatch[]): (target: Function | OperationProcessor<any>, propertyKey?: string | undefined, descriptor?: TypedPropertyDescriptor<any> | undefined) => any;
+export default function authorize(...conditions: AttributeValueMatch[]): (target: OperationProcessor<any> | Function, propertyKey?: string, descriptor?: TypedPropertyDescriptor<any>) => any;
 export declare function canAccessResource(resource: Resource | Resource[], operationName: string, appInstance: ApplicationInstanceInterface): Promise<any>;

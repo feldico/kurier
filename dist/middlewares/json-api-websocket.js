@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = jsonApiWebSocket;
 const application_instance_1 = require("../application-instance");
 const hooks_1 = require("../utils/hooks");
 function jsonApiWebSocket(websocketServer, app) {
@@ -41,5 +42,4 @@ function jsonApiWebSocket(websocketServer, app) {
         });
     });
 }
-exports.default = jsonApiWebSocket;
 //# sourceMappingURL=json-api-websocket.js.map

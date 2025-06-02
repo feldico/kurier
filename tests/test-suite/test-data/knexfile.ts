@@ -3,7 +3,7 @@ import { join } from "path";
 
 export default {
   test_snake_case: {
-    client: "sqlite3",
+    client: "better-sqlite3",
     connection: {
       filename: join(__dirname, "snake_case", "test.sqlite3"),
     },
@@ -18,7 +18,7 @@ export default {
     },
   },
   test_camelCase: {
-    client: "sqlite3",
+    client: "better-sqlite3",
     connection: {
       filename: join(__dirname, "camelCase", "test.sqlite3"),
     },

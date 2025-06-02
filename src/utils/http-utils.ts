@@ -105,12 +105,15 @@ function convertOperationResponseToHttpResponse(
     const document = {
       data: operation.data,
     } as JsonApiDocument;
+
     if (operation.included) {
       document.included = operation.included;
     }
+
     if (!isEmptyObject(operation.meta!)) {
       document.meta = operation.meta;
     }
+
     return document;
   }
 }

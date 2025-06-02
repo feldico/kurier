@@ -62,7 +62,32 @@ export default {
         relationships: {
           author: {
             data: { id: 1, type: "user" },
+            links: {
+              self: "/article/1/relationships/author",
+              related: "/article/1/author"
+            }
           },
+          tags: {
+            data: null,
+            links: {
+                self: "/article/1/relationships/tags",
+                related: "/article/1/tags"
+            },
+            meta: {
+                intermediateTable: "articles_tags",
+                relationshipType: "manyToMany"
+            }
+          },
+          votes: {
+            data: null,
+            links: {
+                self: "/article/1/relationships/votes",
+                related: "/article/1/votes"
+            }
+          },
+        },
+        links: {
+          self: "/article/1"
         },
         meta: {
           hello: "world",
@@ -78,7 +103,32 @@ export default {
         relationships: {
           author: {
             data: { id: 2, type: "user" },
+            links: {
+              self: "/article/2/relationships/author",
+              related: "/article/2/author"
+            }
           },
+          tags: {
+            data: null,
+            links: {
+                self: "/article/2/relationships/tags",
+                related: "/article/2/tags"
+            },
+            meta: {
+                intermediateTable: "articles_tags",
+                relationshipType: "manyToMany"
+            }
+          },
+          votes: {
+            data: null,
+            links: {
+                self: "/article/2/relationships/votes",
+                related: "/article/2/votes"
+            }
+          },
+        },
+        links: {
+          self: "/article/2"
         },
         meta: {
           hello: "world",
@@ -94,7 +144,32 @@ export default {
         relationships: {
           author: {
             data: { id: 2, type: "user" },
+            links: {
+              self: "/article/3/relationships/author",
+              related: "/article/3/author"
+            }
           },
+          tags: {
+            data: null,
+            links: {
+                self: "/article/3/relationships/tags",
+                related: "/article/3/tags"
+            },
+            meta: {
+                intermediateTable: "articles_tags",
+                relationshipType: "manyToMany"
+            }
+          },
+          votes: {
+            data: null,
+            links: {
+                self: "/article/3/relationships/votes",
+                related: "/article/3/votes"
+            }
+          },
+        },
+        links: {
+          self: "/article/3"
         },
         meta: {
           hello: "world",
@@ -110,6 +185,9 @@ export default {
         body: "this is test 1",
         voteCount: 2,
       },
+      links: {
+        self: "/article/1"
+      },
       meta: {
         hello: "world",
       },
@@ -119,6 +197,10 @@ export default {
             id: 1,
             type: "user",
           },
+          links: {
+            self: "/article/1/relationships/author",
+            related: "/article/1/author"
+          }
         },
         votes: {
           data: [
@@ -131,6 +213,10 @@ export default {
               type: "vote",
             },
           ],
+          links: {
+            self: "/article/1/relationships/votes",
+            related: "/article/1/votes"
+          }
         },
       },
     },
@@ -156,7 +242,32 @@ export default {
           ],
           roles: ["user", "author", "voter"],
         },
-        relationships: {},
+        links: {
+          self: "/user/1"
+        },
+        relationships: {
+          articles: {
+            data: null,
+            links: {
+              related: "/user/1/articles",
+              self: "/user/1/relationships/articles",
+            }
+          },
+          comments: {
+              data: null,
+              links: {
+                related: "/user/1/comments",
+                self: "/user/1/relationships/comments",
+              }
+          },
+          votes: {
+              data: null,
+              links: {
+                related: "/user/1/votes",
+                self: "/user/1/relationships/votes",
+              }
+          }
+        },
       },
       {
         id: 1,
@@ -168,18 +279,29 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: {
+          self: "/vote/1"
+        },
         relationships: {
           user: {
             data: {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/vote/1/relationships/user",
+              related: "/vote/1/user"
+            }
           },
           article: {
             data: {
               id: 1,
               type: "article",
             },
+            links: {
+              self: "/vote/1/relationships/article",
+              related: "/vote/1/article"
+            }
           },
         },
       },
@@ -193,18 +315,29 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: {
+          self: "/vote/2"
+        },
         relationships: {
           user: {
             data: {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/vote/2/relationships/user",
+              related: "/vote/2/user"
+            }
           },
           article: {
             data: {
               id: 1,
               type: "article",
             },
+            links: {
+              self: "/vote/2/relationships/article",
+              related: "/vote/2/article"
+            }
           },
         },
       },
@@ -218,6 +351,9 @@ export default {
         body: "this is test 1",
         voteCount: 2,
       },
+      links: {
+        self: "/article/1"
+      },
       meta: {
         hello: "world",
       },
@@ -227,6 +363,10 @@ export default {
             id: 1,
             type: "user",
           },
+          links: {
+            self: "/article/1/relationships/author",
+            related: "/article/1/author"
+          }
         },
         tags: {
           data: [
@@ -235,6 +375,14 @@ export default {
               type: "tag",
             },
           ],
+          links: {
+            self: "/article/1/relationships/tags",
+            related: "/article/1/tags"
+          },
+          meta: {
+            intermediateTable: "articles_tags",
+            relationshipType: "manyToMany"
+          }
         },
       },
     },
@@ -245,7 +393,22 @@ export default {
         attributes: {
           name: "News",
         },
-        relationships: {},
+        links: {
+          self: "/tag/1"
+        },
+        relationships: {
+          articles: {
+              data: null,
+              links: {
+                related: "/tag/1/articles",
+                self: "/tag/1/relationships/articles",
+              },
+              meta: {
+                intermediateTable: "articles_tags",
+                relationshipType: "manyToMany",
+              },
+          }
+        },
       },
     ],
   },
@@ -282,7 +445,7 @@ export default {
           hello: "world",
         },
       },
-     
+
     ],
     included: [
       {
@@ -371,6 +534,9 @@ export default {
           body: "this is test 1",
           voteCount: 2,
         },
+        links: {
+          self: "/article/1"
+        },
         relationships: {
           votes: {
             data: [
@@ -383,12 +549,20 @@ export default {
                 type: "vote",
               },
             ],
+            links: {
+              self: "/article/1/relationships/votes",
+              related: "/article/1/votes"
+            }
           },
           author: {
             data: {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/article/1/relationships/author",
+              related: "/article/1/author"
+            }
           },
         },
         meta: {
@@ -402,19 +576,30 @@ export default {
           body: "this is test 2",
           voteCount: 0,
         },
+        links: {
+          self: "/article/2"
+        },
+        meta: {
+          hello: "world",
+        },
         relationships: {
           votes: {
             data: [],
+            links: {
+              self: "/article/2/relationships/votes",
+              related: "/article/2/votes"
+            }
           },
           author: {
             data: {
               id: 2,
               type: "user",
             },
+            links: {
+              self: "/article/2/relationships/author",
+              related: "/article/2/author"
+            }
           },
-        },
-        meta: {
-          hello: "world",
         },
       },
       {
@@ -424,7 +609,12 @@ export default {
           body: "this is test 3",
           voteCount: 1,
         },
-
+        links: {
+          self: "/article/3"
+        },
+        meta: {
+          hello: "world",
+        },
         relationships: {
           votes: {
             data: [
@@ -433,16 +623,21 @@ export default {
                 type: "vote",
               },
             ],
+            links: {
+              self: "/article/3/relationships/votes",
+              related: "/article/3/votes"
+            }
           },
           author: {
             data: {
               id: 2,
               type: "user",
             },
+            links: {
+              self: "/article/3/relationships/author",
+              related: "/article/3/author"
+            }
           },
-        },
-        meta: {
-          hello: "world",
         },
       },
     ],
@@ -457,18 +652,29 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: {
+          self: "/vote/1"
+        },
         relationships: {
           user: {
             data: {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/vote/1/relationships/user",
+              related: "/vote/1/user"
+            }
           },
           article: {
             data: {
               id: 1,
               type: "article",
             },
+            links: {
+              self: "/vote/1/relationships/article",
+              related: "/vote/1/article"
+            }
           },
         },
       },
@@ -482,18 +688,29 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: {
+          self: "/vote/2"
+        },
         relationships: {
           user: {
             data: {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/vote/2/relationships/user",
+              related: "/vote/2/user"
+            }
           },
           article: {
             data: {
               id: 1,
               type: "article",
             },
+            links: {
+              self: "/vote/2/relationships/article",
+              related: "/vote/2/article"
+            }
           },
         },
       },
@@ -507,18 +724,29 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: {
+          self: "/vote/3"
+        },
         relationships: {
           user: {
             data: {
               id: 3,
               type: "user",
             },
+            links: {
+              self: "/vote/3/relationships/user",
+              related: "/vote/3/user"
+            }
           },
           article: {
             data: {
               id: 3,
               type: "article",
             },
+            links: {
+              self: "/vote/3/relationships/article",
+              related: "/vote/3/article"
+            }
           },
         },
       },
