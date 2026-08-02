@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = jsonApiExpress;
 const express = require("express");
 const compose_middleware_1 = require("compose-middleware");
 const application_instance_1 = require("../application-instance");
@@ -61,5 +62,4 @@ function jsonApiExpress(app, transportLayerOptions = {
         jsonApiExpress,
     ]);
 }
-exports.default = jsonApiExpress;
 //# sourceMappingURL=json-api-express.js.map

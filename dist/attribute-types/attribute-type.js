@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = AttributeType;
 const string_1 = require("../utils/string");
 function AttributeType(name, options) {
     const { jsonType, serialize, deserialize } = options;
@@ -40,5 +41,4 @@ function AttributeType(name, options) {
     Object.defineProperty(attributeClass, "name", { value: `${(0, string_1.capitalize)(name)}` });
     return attributeClass;
 }
-exports.default = AttributeType;
 //# sourceMappingURL=attribute-type.js.map

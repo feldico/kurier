@@ -102,7 +102,30 @@ export default {
           coolFactor: 3,
           roles: ["user", "author", "voter"],
         },
-        relationships: {},
+        links: { self: "/user/4" },
+        relationships: {
+          articles: {
+            data: null,
+            links: {
+              related: "/user/4/articles",
+              self: "/user/4/relationships/articles",
+            }
+          },
+          comments: {
+            data: null,
+            links: {
+              related: "/user/4/comments",
+              self: "/user/4/relationships/comments",
+            }
+          },
+          votes: {
+            data: null,
+            links: {
+              related: "/user/4/votes",
+              self: "/user/4/relationships/votes",
+            }
+          }
+        },
       },
     },
   },
@@ -130,7 +153,30 @@ export default {
           coolFactor: 3,
           roles: ["user", "author", "voter"],
         },
-        relationships: {},
+        links: { self: "/user/2" },
+        relationships: {
+          articles: {
+            data: null,
+            links: {
+              related: "/user/2/articles",
+              self: "/user/2/relationships/articles",
+            }
+          },
+          comments: {
+            data: null,
+            links: {
+              related: "/user/2/comments",
+              self: "/user/2/relationships/comments",
+            }
+          },
+          votes: {
+            data: null,
+            links: {
+              related: "/user/2/votes",
+              self: "/user/2/relationships/votes",
+            }
+          }
+        },
       },
     },
   },
@@ -158,6 +204,10 @@ export default {
               id: 1,
               type: "user",
             },
+            links: {
+              self: "/session/STRING/relationships/user",
+              related: "/session/STRING/user"
+            }
           },
         },
       },
@@ -179,7 +229,32 @@ export default {
         coolFactor: 3,
         roles: ["user", "author", "voter"],
       },
-      relationships: {},
+      links: {
+        self: "/user/1"
+      },
+      relationships: {
+        articles: {
+            data: null,
+            links: {
+              related: "/user/1/articles",
+              self: "/user/1/relationships/articles",
+            }
+        },
+        comments: {
+            data: null,
+            links: {
+              related: "/user/1/comments",
+              self: "/user/1/relationships/comments",
+            }
+        },
+        votes: {
+            data: null,
+            links: {
+              related: "/user/1/votes",
+              self: "/user/1/relationships/votes",
+            }
+        }
+      },
     },
     {
       id: 2,
@@ -195,7 +270,30 @@ export default {
         coolFactor: 3,
         roles: ["user", "author", "voter"],
       },
-      relationships: {},
+      links: { self: "/user/2" },
+      relationships: {
+        articles: {
+            data: null,
+            links: {
+              related: "/user/2/articles",
+              self: "/user/2/relationships/articles",
+            }
+        },
+        comments: {
+            data: null,
+            links: {
+              related: "/user/2/comments",
+              self: "/user/2/relationships/comments",
+            }
+        },
+        votes: {
+            data: null,
+            links: {
+              related: "/user/2/votes",
+              self: "/user/2/relationships/votes",
+            }
+        }
+      },
     },
     {
       id: 3,
@@ -211,7 +309,29 @@ export default {
         coolFactor: 3,
         roles: ["user", "author", "voter"],
       },
-      relationships: {},
+      relationships: {
+        articles: {
+            data: null,
+            links: {
+              related: "/user/3/articles",
+              self: "/user/3/relationships/articles",
+            }
+        },
+        comments: {
+            data: null,
+            links: {
+              related: "/user/3/comments",
+              self: "/user/3/relationships/comments",
+            }
+        },
+        votes: {
+            data: null,
+            links: {
+              related: "/user/3/votes",
+              self: "/user/3/relationships/votes",
+            }
+        }
+      },
     },
   ],
   multipleIncludeGetSingleUser: {
@@ -279,19 +399,20 @@ export default {
           body: "hello",
           type: "not_spam",
         },
+        links: { self: "/comment/1" },
         relationships: {
           author: {
-            data: {
-              id: 1,
-              type: "user",
-            },
+            data: { id: 1, type: "user" },
+            links: { self: "/comment/1/relationships/author", related: "/comment/1/author" }
           },
           parentComment: {
-            data: {
-              id: 2,
-              type: "comment",
-            },
+            data: { id: 2, type: "comment" },
+            links: { self: "/comment/1/relationships/parentComment", related: "/comment/1/parentComment" }
           },
+          article: {
+            data: { id: 1, type: "article" },
+            links: { self: "/comment/1/relationships/article", related: "/comment/1/article" }
+          }
         },
       },
       {
@@ -301,16 +422,20 @@ export default {
           body: "hello3",
           type: "spam",
         },
+        links: { self: "/comment/3" },
         relationships: {
           author: {
-            data: {
-              id: 1,
-              type: "user",
-            },
+            data: { id: 1, type: "user" },
+            links: { self: "/comment/3/relationships/author", related: "/comment/3/author" }
           },
           parentComment: {
             data: null,
+            links: { self: "/comment/3/relationships/parentComment", related: "/comment/3/parentComment" }
           },
+          article: {
+            data: { id: 3, type: "article" },
+            links: { self: "/comment/3/relationships/article", related: "/comment/3/article" }
+          }
         },
       },
       {
@@ -320,12 +445,20 @@ export default {
           body: "this is test 1",
           voteCount: 2,
         },
+        links: { self: "/article/1" },
         relationships: {
           author: {
-            data: {
-              id: 1,
-              type: "user",
-            },
+            data: { id: 1, type: "user" },
+            links: { self: "/article/1/relationships/author", related: "/article/1/author" }
+          },
+          tags: {
+            data: null,
+            links: { self: "/article/1/relationships/tags", related: "/article/1/tags" },
+            meta: { intermediateTable: "articles_tags", relationshipType: "manyToMany" }
+          },
+          votes: {
+            data: null,
+            links: { self: "/article/1/relationships/votes", related: "/article/1/votes" }
           },
         },
       },
@@ -339,18 +472,15 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: { self: "/vote/1" },
         relationships: {
           user: {
-            data: {
-              id: 1,
-              type: "user",
-            },
+            data: { id: 1, type: "user" },
+            links: { self: "/vote/1/relationships/user", related: "/vote/1/user" }
           },
           article: {
-            data: {
-              id: 1,
-              type: "article",
-            },
+            data: { id: 1, type: "article" },
+            links: { self: "/vote/1/relationships/article", related: "/vote/1/article" }
           },
         },
       },
@@ -364,18 +494,15 @@ export default {
           updatedBy: null,
           createdBy: null,
         },
+        links: { self: "/vote/2" },
         relationships: {
           user: {
-            data: {
-              id: 1,
-              type: "user",
-            },
+            data: { id: 1, type: "user" },
+            links: { self: "/vote/2/relationships/user", related: "/vote/2/user" }
           },
           article: {
-            data: {
-              id: 1,
-              type: "article",
-            },
+            data: { id: 1, type: "article" },
+            links: { self: "/vote/2/relationships/article", related: "/vote/2/article" }
           },
         },
       },

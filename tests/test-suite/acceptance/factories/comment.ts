@@ -19,6 +19,10 @@ export const comments = [
           type: "comment",
         },
       },
+      article: {
+        data: null,
+        links: { self: "/comment/1/relationships/article", related: "/comment/1/article" }
+      }
     },
   },
   {
@@ -41,6 +45,10 @@ export const comments = [
           type: "comment",
         },
       },
+      article: {
+        data: null,
+        links: { self: "/comment/2/relationships/article", related: "/comment/2/article" }
+      }
     },
   },
   {
@@ -60,6 +68,10 @@ export const comments = [
       parentComment: {
         data: null,
       },
+      article: {
+        data: null,
+        links: { self: "/comment/3/relationships/article", related: "/comment/3/article" }
+      }
     },
   },
 ];
@@ -87,6 +99,10 @@ export default {
                 type: "user",
               },
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -120,19 +136,20 @@ export default {
             body: "new commentttt",
             type: "spam",
           },
+          links: { self: "/comment/4" },
           relationships: {
             author: {
-              data: {
-                id: 2,
-                type: "user",
-              },
+              data: { id: 2, type: "user" },
+              links: { self: "/comment/4/relationships/author", related: "/comment/4/author" }
             },
             parentComment: {
-              data: {
-                id: 1,
-                type: "comment",
-              },
+              data: { id: 1, type: "comment" },
+              links: { self: "/comment/4/relationships/parentComment", related: "/comment/4/parentComment" }
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -144,19 +161,34 @@ export default {
             body: null,
             type: "spam",
           },
+          links: {
+            self: "/comment/4"
+          },
           relationships: {
             author: {
               data: {
                 id: 2,
                 type: "user",
               },
+              links: {
+                self: "/comment/4/relationships/author",
+                related: "/comment/4/author"
+              }
             },
             parentComment: {
               data: {
                 id: 1,
                 type: "comment",
               },
+              links: {
+                self: "/comment/4/relationships/parentComment",
+                related: "/comment/4/parentComment"
+              }
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -168,16 +200,31 @@ export default {
             body: "new commentttt",
             type: "spam",
           },
+          links: {
+            self: "/comment/4"
+          },
           relationships: {
             author: {
               data: {
                 id: 2,
                 type: "user",
               },
+              links: {
+                self: "/comment/4/relationships/author",
+                related: "/comment/4/author"
+              }
             },
             parentComment: {
               data: null,
+              links: {
+                self: "/comment/4/relationships/parentComment",
+                related: "/comment/4/parentComment"
+              }
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -205,6 +252,10 @@ export default {
                 type: "user",
               },
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -216,19 +267,34 @@ export default {
             body: "updated body",
             type: "spam",
           },
+          links: {
+            self: "/comment/2"
+          },
           relationships: {
             author: {
               data: {
                 id: 2,
                 type: "user",
               },
+              links: {
+                self: "/comment/2/relationships/author",
+                related: "/comment/2/author"
+              }
             },
             parentComment: {
               data: {
                 id: 2,
                 type: "comment",
               },
+              links: {
+                self: "/comment/2/relationships/parentComment",
+                related: "/comment/2/parentComment"
+              }
             },
+            article: {
+              data: null,
+              links: { self: "/comment/2/relationships/article", related: "/comment/2/article" }
+            }
           },
         },
       },
@@ -254,6 +320,10 @@ export default {
                 type: "user",
               },
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -277,6 +347,10 @@ export default {
                 type: "user",
               },
             },
+            article: {
+              data: null,
+              links: { self: "/comment/4/relationships/article", related: "/comment/4/article" }
+            }
           },
         },
       },
@@ -288,16 +362,31 @@ export default {
             body: "updated body",
             type: "spam",
           },
+          links: {
+            self: "/comment/2"
+          },
           relationships: {
             author: {
               data: {
                 id: 2,
                 type: "user",
               },
+              links: {
+                self: "/comment/2/relationships/author",
+                related: "/comment/2/author"
+              }
             },
             parentComment: {
               data: null,
+              links: {
+                self: "/comment/2/relationships/parentComment",
+                related: "/comment/2/parentComment"
+              }
             },
+            article: {
+              data: null,
+              links: { self: "/comment/2/relationships/article", related: "/comment/2/article" }
+            }
           },
         },
       },
@@ -312,16 +401,23 @@ export default {
           body: "hello3",
           type: "spam",
         },
+        links: { self: "/comment/3" },
         relationships: {
           author: {
             data: {
               id: 1,
               type: "user",
             },
+            links: { self: "/comment/3/relationships/author", related: "/comment/3/author" }
           },
           parentComment: {
             data: null,
+            links: { self: "/comment/3/relationships/parentComment", related: "/comment/3/parentComment" }
           },
+          article: {
+            data: null,
+            links: { self: "/comment/3/relationships/article", related: "/comment/3/article" }
+          }
         },
       },
       {
@@ -331,19 +427,26 @@ export default {
           body: "hello2",
           type: "not_spam",
         },
+        links: { self: "/comment/2" },
         relationships: {
           author: {
             data: {
               id: 2,
               type: "user",
             },
+            links: { self: "/comment/2/relationships/author", related: "/comment/2/author" }
           },
           parentComment: {
             data: {
               id: 3,
               type: "comment",
             },
+            links: { self: "/comment/2/relationships/parentComment", related: "/comment/2/parentComment" }
           },
+          article: {
+            data: null,
+            links: { self: "/comment/2/relationships/article", related: "/comment/2/article" }
+          }
         },
       },
       {
@@ -353,19 +456,26 @@ export default {
           body: "hello",
           type: "not_spam",
         },
+        links: { self: "/comment/1" },
         relationships: {
           author: {
             data: {
               id: 1,
               type: "user",
             },
+            links: { self: "/comment/1/relationships/author", related: "/comment/1/author" }
           },
           parentComment: {
             data: {
               id: 2,
               type: "comment",
             },
+            links: { self: "/comment/1/relationships/parentComment", related: "/comment/1/parentComment" }
           },
+          article: {
+            data: null,
+            links: { self: "/comment/1/relationships/article", related: "/comment/1/article" }
+          }
         },
       },
     ],
@@ -377,19 +487,26 @@ export default {
       attributes: {
         body: "hello",
       },
+      links: { self: "/comment/1" },
       relationships: {
         author: {
           data: {
             id: 1,
             type: "user",
           },
+          links: { self: "/comment/1/relationships/author", related: "/comment/1/author" }
         },
         parentComment: {
           data: {
             id: 2,
             type: "comment",
           },
+          links: { self: "/comment/1/relationships/parentComment", related: "/comment/1/parentComment" }
         },
+        article: {
+          data: null,
+          links: { self: "/comment/1/relationships/article", related: "/comment/1/article" }
+        }
       },
     },
   },
@@ -398,9 +515,11 @@ export default {
       id: 1,
       type: "comment",
       attributes: { body: "hello", type: "not_spam" },
+      links: { self: "/comment/1" },
       relationships: {
         parentComment: { data: { id: 2, type: "comment" } },
         author: { data: { id: 1, type: "user" } },
+        article: { data: null, links: { self: "/comment/1/relationships/article", related: "/comment/1/article" } }
       },
     },
     included: [
@@ -408,9 +527,11 @@ export default {
         id: 2,
         type: "comment",
         attributes: { body: "hello2", type: "not_spam" },
+        links: { self: "/comment/2" },
         relationships: {
           author: { data: { id: 2, type: "user" } },
           parentComment: { data: { id: 3, type: "comment" } },
+          article: { data: null, links: { self: "/comment/2/relationships/article", related: "/comment/2/article" } }
         },
       },
     ],

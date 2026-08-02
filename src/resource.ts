@@ -1,4 +1,4 @@
-import { Meta, ResourceAttributes, ResourceRelationships, ResourceSchema } from "./types";
+import { Meta, ResourceAttributes, ResourceRelationships, ResourceSchema, Links } from "./types";
 import { camelize } from "./utils/string";
 
 export default class Resource {
@@ -16,6 +16,7 @@ export default class Resource {
   attributes: ResourceAttributes;
   relationships: ResourceRelationships;
   meta?: Meta;
+  links?: Links;
 
   preventSerialization?: boolean;
 
@@ -24,11 +25,13 @@ export default class Resource {
     attributes,
     relationships,
     meta,
+    links,
   }: {
     id?: string;
     attributes?: ResourceAttributes;
     relationships?: ResourceRelationships;
     meta?: Meta;
+    links?: Links;
   }) {
     this.id = id;
     this.type = (this.constructor as typeof Resource).type;
@@ -37,6 +40,10 @@ export default class Resource {
 
     if (meta) {
       this.meta = meta;
+    }
+
+    if (links) {
+      this.links = links;
     }
   }
 }

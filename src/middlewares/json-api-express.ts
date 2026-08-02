@@ -20,7 +20,7 @@ export default function jsonApiExpress(
     httpStrictMode: false,
   },
   ...middlewares: express.RequestHandler[]
-) {
+): express.RequestHandler {
   const { httpBodyPayload, httpStrictMode } = transportLayerOptions;
 
   const checkStrictMode = async (req: express.Request, res: express.Response, next: () => any) => {

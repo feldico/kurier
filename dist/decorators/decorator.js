@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getArgument = void 0;
+exports.getArgument = getArgument;
+exports.default = decorateWith;
 // TODO: should this filter be decorator-based to prevent name constraints?
 function isOperation(name) {
     return ["get", "add", "update", "remove"].includes(name);
@@ -8,7 +9,6 @@ function isOperation(name) {
 function getArgument(argsList, match) {
     return argsList.find((arg) => arg && match(arg));
 }
-exports.getArgument = getArgument;
 function decorateWith(decorator, ...decoratorArgs) {
     return (target, propertyKey, descriptor) => {
         if (propertyKey && descriptor) {
@@ -35,5 +35,4 @@ function decorateWith(decorator, ...decoratorArgs) {
         }
     };
 }
-exports.default = decorateWith;
 //# sourceMappingURL=decorator.js.map

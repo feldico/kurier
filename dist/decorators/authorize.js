@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.canAccessResource = void 0;
+exports.default = authorize;
+exports.canAccessResource = canAccessResource;
 const json_api_errors_1 = require("../errors/json-api-errors");
 const decorator_1 = require("./decorator");
 const match = (actual) => (item) => actual.includes(item);
@@ -66,7 +67,6 @@ function authorizeMiddleware(operation, conditions) {
 function authorize(...conditions) {
     return (0, decorator_1.default)(authorizeMiddleware, conditions);
 }
-exports.default = authorize;
 async function canAccessResource(resource, operationName, appInstance) {
     const type = Array.isArray(resource) && resource.length ? resource[0].type : resource.type;
     const processor = (await appInstance.processorFor(type));
@@ -79,5 +79,4 @@ async function canAccessResource(resource, operationName, appInstance) {
     }
     return accessRules.every((condition) => conditionsPass(appInstance, condition));
 }
-exports.canAccessResource = canAccessResource;
 //# sourceMappingURL=authorize.js.map
