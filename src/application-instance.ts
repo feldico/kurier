@@ -82,15 +82,22 @@ export default class ApplicationInstance {
 
     const data = <Resource>user.data;
 
-    if (this.app.services.roles) {
-      data.attributes["roles"] = await this.app.services.roles.bind(this)(user.data as User);
-    }
+    try {
+      if (this.app.services.roles) {
+        data.attributes["roles"] = await this.app.services.roles.bind(this)(user.data as User);
+      }
 
-    if (this.app.services.permissions) {
-      data.attributes["permissions"] = await this.app.services.permissions.bind(this)(user.data as User);
-    }
+      if (this.app.services.permissions) {
+        data.attributes["permissions"] = await this.app.services.permissions.bind(this)(user.data as User);
+      }
 
-    await this.transaction.commit();
-    return data;
+      await this.transaction.commit();
+      return data;
+    } catch (error) {
+      await this.transaction.rollback(error);
+      throw error;
+    } finally {
+      this.transaction = {} as NoOpTransaction;
+    }
   }
 }

@@ -61,14 +61,23 @@ class ApplicationInstance {
         }
         this.transaction = await this.app.createTransaction();
         const data = user.data;
-        if (this.app.services.roles) {
-            data.attributes["roles"] = await this.app.services.roles.bind(this)(user.data);
+        try {
+            if (this.app.services.roles) {
+                data.attributes["roles"] = await this.app.services.roles.bind(this)(user.data);
+            }
+            if (this.app.services.permissions) {
+                data.attributes["permissions"] = await this.app.services.permissions.bind(this)(user.data);
+            }
+            await this.transaction.commit();
+            return data;
         }
-        if (this.app.services.permissions) {
-            data.attributes["permissions"] = await this.app.services.permissions.bind(this)(user.data);
+        catch (error) {
+            await this.transaction.rollback(error);
+            throw error;
         }
-        await this.transaction.commit();
-        return data;
+        finally {
+            this.transaction = {};
+        }
     }
 }
 exports.default = ApplicationInstance;

@@ -198,10 +198,15 @@ export default class Application {
             throw new Error(`Reverse manyToMany relationship ${thisResourceRelationship[0]} on ${relatedResourceClass.type} missing foreignKeyName definition.`);
           }
 
-          if (!processor.appInstance.app.services?.knex) {
+          // Prefer the open request transaction to avoid a second pool checkout
+          // while the Kurier transaction is held (pool exhaustion risk).
+          const knex = (typeof processor.appInstance.transaction === "function"
+            ? processor.appInstance.transaction
+            : processor.appInstance.app.services?.knex) as Knex | undefined;
+          if (!knex) {
             throw new Error("Knex service is required for manyToMany relationship endpoints.");
           }
-          const subQuery = processor.appInstance.app.services.knex(intermediateTable)
+          const subQuery = knex(intermediateTable)
             .select(relatedForeignKey)
             .where({ [thisForeignKey]: op.ref.id });
 
